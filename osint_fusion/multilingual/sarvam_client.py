@@ -23,6 +23,26 @@ SARVAM_LOCALE_MAP = {
 }
 
 
+def _load_dotenv_if_present():
+    if "SARVAM_API_KEY" not in os.environ or not os.environ["SARVAM_API_KEY"].strip():
+        cur = os.path.dirname(os.path.abspath(__file__))
+        for _ in range(4):
+            env_file = os.path.join(cur, ".env")
+            if os.path.isfile(env_file):
+                try:
+                    with open(env_file, "r", encoding="utf-8") as f:
+                        for line in f:
+                            line = line.strip()
+                            if line and not line.startswith("#") and "=" in line:
+                                k, v = line.split("=", 1)
+                                if k.strip() == "SARVAM_API_KEY":
+                                    os.environ["SARVAM_API_KEY"] = v.strip().strip("'\"")
+                    break
+                except Exception:
+                    pass
+            cur = os.path.dirname(cur)
+
+
 class SarvamAIClient:
     """
     Client for invoking Sarvam AI's Indic models:
@@ -33,6 +53,7 @@ class SarvamAIClient:
     """
 
     def __init__(self, api_key: Optional[str] = None):
+        _load_dotenv_if_present()
         self.api_key = api_key or os.getenv("SARVAM_API_KEY")
 
     def is_configured(self) -> bool:
