@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OSINT Fusion Workbench — Multilingual Intelligence Analysis Agent</title>
+  <meta name="description" content="Advanced OSINT Fusion Workbench for multilingual intelligence processing, conservative entity resolution, cross-lingual knowledge graphs, weak-signal detection, and human verification oversight.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Outfit:wght@500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Cytoscape.js CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="/static/css/styles.css">
+</head>
+<body>
+
+  <!-- App Header -->
+  <header class="app-header">
+    <div class="brand-section">
+      <div class="logo-badge" id="logo-icon">🌐</div>
+      <div class="brand-title">
+        <h1>OSINT FUSION WORKBENCH</h1>
+        <p>Multilingual Intelligence Analysis & Evidence Provenance Agent</p>
+      </div>
+    </div>
+
+    <div class="header-badges">
+      <span class="badge badge-classified" id="badge-classification">
+        🔒 UNCLASSIFIED // OSINT EVALUATION ONLY
+      </span>
+      <span class="badge badge-lawful" id="badge-lawful-sourcing">
+        ✓ LAWFUL PUBLIC SOURCING VERIFIED
+      </span>
+      <span class="badge badge-analyst" id="badge-analyst-id">
+        👤 Lead Analyst (Active)
+      </span>
+      <button class="btn-header" id="btn-toggle-pii" title="Toggle PII Masking">
+        🛡️ PII Redaction: OFF
+      </button>
+      <button class="btn-header" id="btn-reset-benchmark" title="Reload Benchmark Corpus">
+        🔄 Reset Benchmark
+      </button>
+    </div>
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="nav-container">
+    <div class="nav-tab active" data-tab="dashboard">
+      📊 Dashboard & Overview
+    </div>
+    <div class="nav-tab" data-tab="sources">
+      🌐 Ingestion & Multilingual Studio <span class="tab-badge" id="badge-sources-count">7</span>
+    </div>
+    <div class="nav-tab" data-tab="entities">
+      👥 Entity Resolution Explorer <span class="tab-badge" id="badge-entities-count">8</span>
+    </div>
+    <div class="nav-tab" data-tab="timeline">
+      ⏱️ Chronological Timeline <span class="tab-badge" id="badge-events-count">5</span>
+    </div>
+    <div class="nav-tab" data-tab="graph">
+      🕸️ Knowledge Graph Explorer
+    </div>
+    <div class="nav-tab" data-tab="signals">
+      🔍 Weak Signals & Patterns <span class="tab-badge" id="badge-signals-count">3</span>
+    </div>
+    <div class="nav-tab" data-tab="contradictions">
+      ⚡ Contradictions & Circular Reporting <span class="tab-badge badge-alert" id="badge-contra-count">2</span>
+    </div>
+    <div class="nav-tab" data-tab="review">
+      🛡️ Analyst Review Queue <span class="tab-badge badge-alert" id="badge-review-count">5</span>
+    </div>
+    <div class="nav-tab" data-tab="report">
+      📄 10-Section Intelligence Report
+    </div>
+    <div class="nav-tab" data-tab="governance">
+      ⚖️ Ethics & Privacy Manual
+    </div>
+  </nav>
+
+  <!-- Main Container -->
+  <main class="main-wrapper">
+
+    <!-- TAB 1: DASHBOARD -->
+    <section class="tab-panel active" id="panel-dashboard">
+      <!-- Stat Cards -->
+      <div class="stat-grid">
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Ingested Sources</span>
+            <span class="stat-icon">📰</span>
+          </div>
+          <div class="stat-value" id="stat-sources">7</div>
+          <div class="stat-subtext">5 Languages (BN, HI, AS, TA, EN)</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Resolved Entities</span>
+            <span class="stat-icon">👥</span>
+          </div>
+          <div class="stat-value" id="stat-entities">8</div>
+          <div class="stat-subtext">Conservative Resolution Enforced</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Reconstructed Events</span>
+            <span class="stat-icon">⚡</span>
+          </div>
+          <div class="stat-value" id="stat-events">5</div>
+          <div class="stat-subtext">Chronological Timeline Anchors</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Weak Signals Detected</span>
+            <span class="stat-icon">🔍</span>
+          </div>
+          <div class="stat-value" id="stat-signals">3</div>
+          <div class="stat-subtext">Distinct Evidence vs Strength</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Factual Contradictions</span>
+            <span class="stat-icon">⚡</span>
+          </div>
+          <div class="stat-value" id="stat-contradictions">2</div>
+          <div class="stat-subtext">Seizure Date & Weight Conflicts</div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-header">
+            <span class="stat-title">Review Queue Pending</span>
+            <span class="stat-icon">⏳</span>
+          </div>
+          <div class="stat-value" id="stat-review-pending">5</div>
+          <div class="stat-subtext">Human-in-the-Loop Oversight</div>
+        </div>
+      </div>
+
+      <!-- Audio Capability Notice Banner -->
+      <div id="audio-capability-notice"></div>
+
+      <!-- Quick Executive Summary Banner -->
+      <div class="alert-box alert-success">
+        <div class="alert-icon">🛡️</div>
+        <div class="alert-content">
+          <h4>Active Intelligence Scenario: Indo-Bangladesh Border Logistics Assessment</h4>
+          <p>
+            The agent has ingested and cross-referenced 7 lawful sources spanning Bengali press dispatches, Hindi police bulletins,
+            Assamese public radio transcripts, Tamil maritime registries, and public court records.
+            <strong>Conservative resolution prevented a false identity merge</strong> between the driver and an unrelated civil litigant.
+            <strong>Circular reporting</strong> was flagged between an online aggregator and an investigative report.
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Visual Cards -->
+      <div class="grid-2">
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3>🌐 Multilingual Corpus Distribution</h3>
+          </div>
+          <div style="font-size: 0.88rem; line-height: 1.8;">
+            <p>• <strong>Bengali (বাংলা):</strong> 1 source (Local crime reporting, driver apprehension, Fulbari corridor)</p>
+            <p>• <strong>Hindi (हिन्दी):</strong> 1 source (Official Police Commissionerate press release & FIR details)</p>
+            <p>• <strong>Assamese (অসমীয়া):</strong> 1 source (Authorized community radio transcript with timestamped boat offloading)</p>
+            <p>• <strong>Tamil (தமிழ்):</strong> 1 source (Statutory Port Gazette registry of maritime logistics fleet)</p>
+            <p>• <strong>English:</strong> 3 sources (Investigative report, secondary copycat aggregator, public court docket)</p>
+          </div>
+        </div>
+
+        <div class="panel-card">
+          <div class="panel-header">
+            <h3>⚖️ Verification Posture & Principles</h3>
+          </div>
+          <div style="font-size: 0.88rem; line-height: 1.8;">
+            <p>✓ <strong>No Automatic Merges:</strong> Clashing parentage/locations keep entities separate.</p>
+            <p>✓ <strong>Distinguish Mention vs Guilt:</strong> Corporate directorship does not imply criminal complicity.</p>
+            <p>✓ <strong>No Hallucinated Citations:</strong> Every claim retains verbatim quotes and page/timestamp locators.</p>
+            <p>✓ <strong>Human Analyst Override:</strong> Machine hypotheses are tagged <code>UNREVIEWED</code> until signed off.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: INGESTION & MULTILINGUAL STUDIO -->
+    <section class="tab-panel" id="panel-sources">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>📥 Ingest Custom Multilingual Source Document</h3>
+          <span class="badge badge-lawful">Lawful Open-Source Input</span>
+        </div>
+        <form id="ingest-form">
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Document Title / Headline</label>
+              <input type="text" id="ingest-title" class="form-control" placeholder="e.g. Border Transport Gazette Notice" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Publishing Organization / Source Agency</label>
+              <input type="text" id="ingest-org" class="form-control" placeholder="e.g. Anandabazar Patrika / PIB Delhi" required>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label class="form-label">Source Classification</label>
+              <select id="ingest-type" class="form-control">
+                <option value="news_article">News Article</option>
+                <option value="official_statement">Official Statement</option>
+                <option value="police_report">Police Report</option>
+                <option value="court_document">Court Document</option>
+                <option value="audio_broadcast">Audio Broadcast Transcript</option>
+                <option value="investigative_report">Investigative Report</option>
+                <option value="commerce_registry">Commerce Registry</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Original URL or File Locator (Optional)</label>
+              <input type="text" id="ingest-url" class="form-control" placeholder="https://example.com/press-release">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Source Text or Timestamped Transcript (English, Bengali, Hindi, Assamese, Tamil, Telugu, Marathi)</label>
+            <textarea id="ingest-text" class="form-control" rows="4" placeholder="Paste verbatim source text or transcript with [MM:SS] timestamps..." required></textarea>
+          </div>
+          <button type="submit" class="btn-action btn-primary">⚡ Ingest, Detect Language & Analyze</button>
+        </form>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>📚 Ingested Intelligence Sources (Bilingual Studio)</h3>
+          <span class="badge" style="background: rgba(255,255,255,0.08);">Side-by-Side Original Script & Machine Translation</span>
+        </div>
+        <div id="sources-list-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: ENTITY RESOLUTION EXPLORER -->
+    <section class="tab-panel" id="panel-entities">
+      <div id="entity-ambiguity-notice"></div>
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>👥 Resolved Intelligence Entities</h3>
+          <span class="badge badge-lawful">Conservative Resolution Engine</span>
+        </div>
+        <div id="entities-table-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4: CHRONOLOGICAL TIMELINE -->
+    <section class="tab-panel" id="panel-timeline">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>⏱️ Chronological Event Reconstruction</h3>
+          <span class="badge" style="background: rgba(255,255,255,0.08);">Bounded Precision & Uncertainty Tracking</span>
+        </div>
+        <div id="timeline-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5: KNOWLEDGE GRAPH EXPLORER -->
+    <section class="tab-panel" id="panel-graph">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>🕸️ Cross-Lingual Knowledge Graph</h3>
+          <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+            <a href="/api/graph/export/csv/nodes" download class="btn-action">⬇️ Nodes CSV</a>
+            <a href="/api/graph/export/csv/edges" download class="btn-action">⬇️ Edges CSV</a>
+            <a href="/api/graph/export/cypher" target="_blank" class="btn-action">⬇️ Cypher Script</a>
+            <a href="/api/graph/export/mermaid" target="_blank" class="btn-action">⬇️ Mermaid</a>
+          </div>
+        </div>
+
+        <div class="graph-toolbar">
+          <span style="font-size: 0.8rem; color: var(--text-muted);">Filter Node Type:</span>
+          <button class="btn-action" onclick="filterGraphByType('ALL')">All</button>
+          <button class="btn-action" onclick="filterGraphByType('PERSON')">Persons</button>
+          <button class="btn-action" onclick="filterGraphByType('ORGANIZATION')">Organizations</button>
+          <button class="btn-action" onclick="filterGraphByType('LOCATION')">Locations</button>
+          <button class="btn-action" onclick="filterGraphByType('EVENT')">Events</button>
+          <button class="btn-action" onclick="filterGraphByType('SOURCE')">Sources</button>
+          <span style="margin-left: auto;"></span>
+          <button class="btn-action" onclick="zoomGraphIn()">🔍 +</button>
+          <button class="btn-action" onclick="zoomGraphOut()">🔍 -</button>
+          <button class="btn-action" onclick="fitGraphView()">⛶ Fit View</button>
+        </div>
+
+        <div class="grid-2" style="grid-template-columns: 2.5fr 1fr;">
+          <div id="cytoscape-container"></div>
+          <div id="graph-inspector-panel">
+            <div class="panel-card" style="margin-bottom: 0; text-align: center; color: var(--text-dim); padding: 3rem 1rem;">
+              <p>Click any node or relationship edge in the graph canvas to inspect provenance, quotes, and audit status.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 6: WEAK SIGNALS & PATTERNS -->
+    <section class="tab-panel" id="panel-signals">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>🔍 Weak-Signal Detection & Confidence Scoring</h3>
+          <span class="badge badge-classified">Heuristic Scoring Formula</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Patterns are evaluated using distinct metrics: <strong>Evidence Confidence</strong> (quality of supporting primary records)
+          vs <strong>Signal Strength</strong> (potential operational anomaly level). Scores are heuristics, not calibrated probabilities.
+        </p>
+        <div id="signals-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 7: CONTRADICTIONS & CIRCULAR REPORTING -->
+    <section class="tab-panel" id="panel-contradictions">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>⚡ Cross-Source Contradictions & Circular Reporting Analysis</h3>
+          <span class="badge badge-alert">Integrity & Echo-Chamber Audit</span>
+        </div>
+        <div id="contradictions-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 8: ANALYST REVIEW QUEUE -->
+    <section class="tab-panel" id="panel-review">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>🛡️ Human-in-the-Loop Analyst Review Queue</h3>
+          <span class="badge badge-classified">Audit Trail Enforced</span>
+        </div>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem;">
+          Preserves analyst control throughout the pipeline. Original machine hypotheses are never overwritten.
+          Analyst rationale notes are immutably logged into the audit registry.
+        </p>
+        <div id="review-queue-container"></div>
+      </div>
+
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>📋 Immutable Intelligence Audit Trail</h3>
+          <span class="badge" style="background: rgba(255,255,255,0.08);">Chain-of-Custody Log</span>
+        </div>
+        <div id="audit-log-container"></div>
+      </div>
+    </section>
+
+    <!-- TAB 9: 10-SECTION INTELLIGENCE REPORT -->
+    <section class="tab-panel" id="panel-report">
+      <div id="report-container">
+        <p>Loading intelligence report...</p>
+      </div>
+    </section>
+
+    <!-- TAB 10: ETHICS & GOVERNANCE -->
+    <section class="tab-panel" id="panel-governance">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3>⚖️ Safety, Privacy, and Responsible Use Manual</h3>
+          <span class="badge badge-lawful">Compliance Directives</span>
+        </div>
+        <div style="font-size: 0.9rem; line-height: 1.7;">
+          <h4 style="color: var(--accent-cyan); margin-top: 1rem;">1. Lawful Public Sourcing Only</h4>
+          <p>
+            The agent operates exclusively on public documents, officially released police bulletins, court orders,
+            commercial gazettes, and authorized community broadcasts. It does not conduct unauthorized interception,
+            bypass access controls, or process materials obtained unlawfully.
+          </p>
+
+          <h4 style="color: var(--accent-cyan); margin-top: 1rem;">2. No Guilt by Association</h4>
+          <p>
+            Corporate co-registration, commercial affiliation, familial ties, or co-mention in news coverage
+            <strong>must never be interpreted as evidence of criminal guilt or conspiracy</strong>.
+            Weak links and hypotheses are isolated in the Analyst Review Queue and labeled with explicit confidence limitations.
+          </p>
+
+          <h4 style="color: var(--accent-cyan); margin-top: 1rem;">3. Conservative Entity Resolution</h4>
+          <p>
+            To prevent doxxing or mistaken identity harm, people sharing names are kept strictly distinct unless conclusive,
+            corroborating biographical evidence (e.g. father's name, verified address, judicial confirmation) establishes identity.
+          </p>
+
+          <h4 style="color: var(--accent-cyan); margin-top: 1rem;">4. PII Minimization</h4>
+          <p>
+            Private phone numbers, domestic residential addresses, and personal identifying details of uncharged individuals
+            are masked using the built-in PII redaction shield.
+          </p>
+
+          <h4 style="color: var(--accent-cyan); margin-top: 1rem;">5. Audio Transcription Disclosures</h4>
+          <p>
+            Speech-to-text models and acoustic processing are never fabricated. If speech hardware or cloud APIs are unavailable,
+            transcripts are processed with explicit uncertainty markings (e.g. <code>[uncertain: ...]</code>) and clearly disclosed limits.
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Review Decision Modal -->
+  <div class="modal-overlay" id="review-decision-modal">
+    <div class="modal-window">
+      <div class="panel-header">
+        <h3 id="modal-review-title">Record Analyst Decision</h3>
+        <button class="btn-action" onclick="closeReviewModal()">✕</button>
+      </div>
+      <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">
+        Please enter the substantive rationale for your decision. This entry will be permanently recorded in the immutable audit log.
+      </p>
+      <div class="form-group">
+        <label class="form-label">Analyst Rationale / Verification Notes</label>
+        <textarea id="modal-rationale-input" class="form-control" rows="4" placeholder="Explain basis for approval, rejection, or field verification request..."></textarea>
+      </div>
+      <div style="display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem;">
+        <button class="btn-action" onclick="closeReviewModal()">Cancel</button>
+        <button class="btn-action btn-primary" onclick="submitReviewDecision()">Confirm & Record Audit Entry</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Application Scripts -->
+  <script src="/static/js/graph_view.js"></script>
+  <script src="/static/js/app.js"></script>
+</body>
+</html>
