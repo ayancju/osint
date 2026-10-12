@@ -13,6 +13,11 @@ Prioritizes **evidence provenance, explainability, uncertainty bounding, privacy
 - **Side-by-Side Preservation:** Maintains original-script verbatim text alongside English translations. Never discards original phrasing.
 - **Code-Mixing Detection:** Identifies mixed-script content (e.g. Banglish, Hinglish, bilingual police records).
 - **Audio Transcript Analysis:** Supports authorized broadcast transcripts with timecodes (`[00:45]`, `[01:23]`), flags uncertain tokens (`[uncertain: ...]`, `[inaudible]`), and enforces transparency on acoustic tool availability.
+- **Sarvam AI Integration:** Seamlessly connects with Sarvam AI Indic models when `SARVAM_API_KEY` is configured:
+  - **Translation (`mayura:v1`):** Indic-to-English neural translation.
+  - **Speech-to-Text (`saaras:v1`):** Indic audio acoustic transcription and spoken translation with timestamp extraction.
+  - **Transliteration:** Cross-script phonetic normalizer.
+  - **Graceful Fallback:** When `SARVAM_API_KEY` is unconfigured, the workbench runs locally on deterministic Unicode script classifiers and benchmark verified translations.
 
 ### 2. Conservative Entity Resolution
 - **Strict Anti-Merge Protocol:** Forbids merging people or organizations merely because names match phonetically or orthographically.

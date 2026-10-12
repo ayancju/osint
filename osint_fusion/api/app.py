@@ -226,6 +226,32 @@ def get_audio_capabilities():
     return engine.get_dashboard_summary()["audio_capabilities"]
 
 
+@app.get("/api/sarvam/status")
+def get_sarvam_status():
+    """Returns current configuration status of Sarvam AI Indic models."""
+    from ..multilingual.sarvam_client import SarvamAIClient
+    client = SarvamAIClient()
+    return client.get_status()
+
+
+class SarvamConfigureRequest(BaseModel):
+    api_key: str
+
+
+@app.post("/api/sarvam/configure")
+def configure_sarvam(payload: SarvamConfigureRequest):
+    """Dynamically sets or updates the Sarvam AI subscription key."""
+    import os
+    from ..multilingual.sarvam_client import SarvamAIClient
+    os.environ["SARVAM_API_KEY"] = payload.api_key.strip()
+    client = SarvamAIClient(api_key=payload.api_key.strip())
+    return {
+        "status": "success",
+        "message": "Sarvam AI API key configured successfully",
+        "sarvam_status": client.get_status()
+    }
+
+
 @app.post("/api/reset-corpus")
 def reset_to_benchmark():
     """Resets the workbench state to the default benchmark test corpus."""

@@ -1,7 +1,10 @@
-"""Translation management with side-by-side original text preservation and provenance labeling."""
+"""Translation management with side-by-side original text preservation,
+Sarvam AI (mayura:v1) live translation support, and provenance labeling.
+"""
 
 from typing import Dict, Optional, Tuple
 from ..models.source import LanguageCode
+from .sarvam_client import SarvamAIClient
 
 
 class TranslationManager:
@@ -63,15 +66,32 @@ class TranslationManager:
     ) -> Tuple[str, str]:
         """
         Returns (translation_text, translation_status_label).
-        Guarantees that machine translations are stamped with clear provenance headers.
+        Prioritizes live Sarvam AI (mayura:v1) translation if SARVAM_API_KEY is configured.
+        Falls back to benchmark translations or automated fallback annotation.
         """
+        # Benchmark curated translation overrides
         if source_id in cls.VERIFIED_BENCHMARK_TRANSLATIONS:
             return cls.VERIFIED_BENCHMARK_TRANSLATIONS[source_id], "BENCHMARK_VERIFIED_MACHINE_TRANSLATION"
 
         if detected_language == LanguageCode.ENGLISH:
             return original_text, "ORIGINAL_ENGLISH_VERBATIM"
 
-        # Automated fallback annotation for newly added analyst documents
+        # Check if live Sarvam AI client is configured
+        sarvam = SarvamAIClient()
+        if sarvam.is_configured():
+            sarvam_res = sarvam.translate(
+                text=original_text,
+                source_lang=detected_language.value,
+                target_lang="en",
+            )
+            if sarvam_res and sarvam_res.get("translated_text"):
+                live_text = sarvam_res["translated_text"]
+                return (
+                    f"[MACHINE-TRANSLATED: SARVAM-AI MAYURA:V1 | {detected_language.value.upper()} -> EN]\n"
+                    f"{live_text}"
+                ), "SARVAM_AI_LIVE_MAYURA_V1"
+
+        # Automated fallback annotation for unconfigured environments
         lang_label = detected_language.value.upper()
         return (
             f"[MACHINE-TRANSLATED: {lang_label} -> ENGLISH | AUTOMATED PIPELINE]\n"

@@ -3,6 +3,7 @@
 import re
 from typing import Dict, List, Any, Optional
 from ..models.source import AudioMetadata
+from .sarvam_client import SarvamAIClient
 
 
 TIMESTAMP_PATTERN = re.compile(r'\[(\d{2}:\d{2})\]\s*(.*)')
@@ -18,19 +19,40 @@ class AudioSpeechProcessor:
     @staticmethod
     def inspect_audio_capabilities() -> Dict[str, Any]:
         """Returns disclosure of available acoustic and speech-to-text processing engines."""
+        sarvam = SarvamAIClient()
+        sarvam_active = sarvam.is_configured()
+
+        if sarvam_active:
+            return {
+                "speech_recognition_tool_available": True,
+                "sarvam_configured": True,
+                "active_engine": "Sarvam AI Saaras:v1 Indic Speech-to-Text",
+                "status_message": (
+                    "Sarvam AI Saaras:v1 Speech-to-Text connector is ACTIVE and configured with live API credentials. "
+                    "Supports acoustic decoding and direct spoken Indic translation with timestamp tracking."
+                ),
+                "next_practical_steps": [
+                    "1. Upload or pass raw WAV/MP3 broadcast recordings to /api/audio/transcribe.",
+                    "2. Audio will be processed through Sarvam Saaras:v1 speech-to-text pipeline.",
+                    "3. Timestamps and transcription confidence scores are automatically retained.",
+                    "4. Chain-of-custody recording log maintained for lawful radio monitoring."
+                ]
+            }
+
         return {
             "speech_recognition_tool_available": False,
-            "external_whisper_configured": False,
+            "sarvam_configured": False,
+            "active_engine": "Simulated Benchmark Certified Transcripts",
             "status_message": (
-                "Native acoustic audio decoding and automated speech-to-text API (e.g. Whisper / Sarvam Audio API) "
-                "is currently not configured with live hardware microphones or direct cloud STT API credentials. "
-                "Transcripts must be imported with analyst certification and timestamp metadata."
+                "Native acoustic audio decoding API (Sarvam AI Saaras:v1 / Whisper) is currently NOT active "
+                "(SARVAM_API_KEY environment variable is not set). "
+                "Transcripts are currently imported via analyst-certified text with timestamp metadata."
             ),
             "next_practical_steps": [
-                "1. Provide verified broadcast audio transcript in text format with [MM:SS] timestamps.",
-                "2. Mark uncertain or inaudible words explicitly as [uncertain: 'word'] or [inaudible].",
-                "3. Configure an authorized Speech API key (e.g. Sarvam AI / OpenAI / Whisper local) in osint_fusion.config.",
-                "4. Maintain chain-of-custody recording log for lawful radio interception."
+                "1. To activate live acoustic transcription, set the environment variable: export SARVAM_API_KEY='your-key'.",
+                "2. Transcripts currently provide verified broadcast text with [MM:SS] timestamps.",
+                "3. Uncertain or inaudible words are explicitly tagged as [uncertain: 'word'] or [inaudible].",
+                "4. Maintain chain-of-custody recording logs for authorized radio interception."
             ]
         }
 
